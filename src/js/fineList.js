@@ -6,7 +6,6 @@ window.fineList = {
 let DB = data.finesData;
 
 function searchFines(searchKey) {
-    const re = /\d{3}/;
-    return DB.filter((item) => re.test(searchKey)? item.номер === searchKey: item.тип === searchKey);
+    return DB.filter((item) => /\d{3}/.test(searchKey)? item.номер === searchKey: item.тип === searchKey);
 }
 
