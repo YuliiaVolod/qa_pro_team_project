@@ -13,6 +13,7 @@ let buttonSubmit = document.getElementById("payFine");
 
 //Ця зміна містить всі дані які в нас зберігаються у файлі data
 let DB = data.finesData;
+let alertMessage = '';
 
 
 /**
@@ -34,5 +35,39 @@ alert "Номер не співпадає" або "Сума не співпад�
  */
 buttonSubmit.addEventListener('click',payFine);
 function payFine(){
+    alertMessage = '';
+    let index = checkNumSum();
+    checkPass();
+    checkCardNum();
+    checkCardCvv();
+    (alertMessage)?alert(alertMessage):(DB.splice(index, 1), alert("Оплата успішно виконана!"));
+}
 
+function checkNumSum(){
+    let isFound = false,
+        index;
+    for (let i = 0;  i < DB.length; i++){
+        if (fineNumber.value == DB[i]['номер']){
+            isFound = true;
+            index = i;
+            alertMessage += (amount.value == DB[i]['сума'])?'':'Сума не співпадає\n';
+        }     
+    }
+    alertMessage += isFound?'':'Номер не співпадає\n';
+    return index;
+}
+
+function checkPass(){
+    let passTemplate = /^[а-яґєії]{2}\d{6}$/i;
+    alertMessage += (passTemplate.test(passport.value)?'':'Не вірний паспортний номер\n');
+}
+
+function checkCardNum(){
+    let cardTemplate = /^\d{16}$/;
+    alertMessage += (cardTemplate.test(creditCardNumber.value)?'':'Не вірна кредитна картка\n');
+}
+
+function checkCardCvv(){
+    let cvvTemplate = /^\d{3}$/;
+    alertMessage += (cvvTemplate.test(cvv.value)?'':'Не вірний cvv\n');
 }
